@@ -1,0 +1,64 @@
+name: Almanax
+
+on:
+  schedule:
+    # Minuit à Paris = 22h UTC en été, 23h UTC en hiver : on passe aux deux heures,
+    # le script sait lequel des deux runs doit poster sur Discord.
+    - cron: "5 22 * * *"
+    - cron: "5 23 * * *"
+  push:
+    branches: [main]
+    paths: ["docs/**", "config/**"]
+  workflow_dispatch:
+    inputs:
+      force_notify:
+        description: "Forcer l'envoi Discord"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: almanax
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        if: github.event_name != 'push' || hashFiles('docs/data/almanax.json') == ''
+        with:
+          python-version: "3.12"
+
+      - name: Générer les données
+        if: github.event_name != 'push' || hashFiles('docs/data/almanax.json') == ''
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          SITE_URL: ${{ vars.SITE_URL }}
+          WATCH_TAGS: ${{ vars.WATCH_TAGS }}
+        run: python scripts/generate.py --notify ${{ inputs.force_notify && '--force-notify' || '' }}
+
+      - name: Enregistrer les données
+        if: github.event_name != 'push' || hashFiles('docs/data/almanax.json') == ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data reports
+          git diff --cached --quiet || git commit -m "data: almanax $(TZ=Europe/Paris date +%F)"
+          git push
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+      - id: deploy
+        uses: actions/deploy-pages@v4

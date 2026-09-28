@@ -1,0 +1,255 @@
+{
+  "version": 1,
+  "fallback_tag": "autre",
+  "tags": {
+    "xp": {
+      "label": "XP personnage",
+      "emoji": "⭐",
+      "order": 1,
+      "related": [
+        "challenge"
+      ],
+      "note": "Les jours de challenge augmentés boostent aussi l'XP : voir le tag Challenge.",
+      "color": "#B07A12"
+    },
+    "butin": {
+      "label": "Butin",
+      "emoji": "💎",
+      "order": 2,
+      "related": [
+        "challenge"
+      ],
+      "note": "Les jours de challenge augmentés boostent aussi le butin : voir le tag Challenge.",
+      "color": "#2F6F8F"
+    },
+    "challenge": {
+      "label": "Challenge",
+      "emoji": "⚔️",
+      "order": 3,
+      "related": [
+        "xp",
+        "butin"
+      ],
+      "note": "Les challenges augmentés multiplient les bonus d'XP et de butin des combats concernés.",
+      "color": "#B4492F"
+    },
+    "quete": {
+      "label": "Quête",
+      "emoji": "📜",
+      "order": 4,
+      "related": [],
+      "color": "#6B5B95"
+    },
+    "metier": {
+      "label": "Métier & craft",
+      "emoji": "🌿",
+      "order": 5,
+      "related": [],
+      "color": "#4E7D3A"
+    },
+    "montures": {
+      "label": "Montures & familiers",
+      "emoji": "🐎",
+      "order": 6,
+      "related": [],
+      "color": "#8A5A3C"
+    },
+    "pvp": {
+      "label": "PvP & guilde",
+      "emoji": "🏰",
+      "order": 7,
+      "related": [],
+      "color": "#7A2E3B"
+    },
+    "anomalies": {
+      "label": "Anomalies & dimensions",
+      "emoji": "🌀",
+      "order": 8,
+      "related": [],
+      "color": "#3E6E6E"
+    },
+    "autre": {
+      "label": "Autre",
+      "emoji": "✨",
+      "order": 9,
+      "related": [],
+      "color": "#7D766C"
+    }
+  },
+  "same_as": {
+    "generation-of-resources": "resource-generation",
+    "treasure-chest": "treasure-chests"
+  },
+  "types": {
+    "experience-points": [
+      "xp"
+    ],
+    "experience-points-and-loot-as-tears": [
+      "xp",
+      "butin"
+    ],
+    "experience-points-and-loot-from-pirates": [
+      "xp",
+      "butin"
+    ],
+    "experience-points-and-loot-as-pants": [
+      "xp",
+      "butin"
+    ],
+    "experience-points-and-loot-from-marine-creatures": [
+      "xp",
+      "butin"
+    ],
+    "loot": [
+      "butin"
+    ],
+    "double-loot": [
+      "butin"
+    ],
+    "treasure-chests": [
+      "butin",
+      "quete"
+    ],
+    "treasure-chest": [
+      "butin",
+      "quete"
+    ],
+    "extra-challenge": [
+      "challenge"
+    ],
+    "increased-challenges": [
+      "challenge"
+    ],
+    "dungeon-challenges": [
+      "challenge"
+    ],
+    "quest-experience": [
+      "quete"
+    ],
+    "repeatable-quest": [
+      "quete"
+    ],
+    "repeatable-quest-and-chocomania": [
+      "quete"
+    ],
+    "quests-and-kamas": [
+      "quete"
+    ],
+    "wanted-notices": [
+      "quete"
+    ],
+    "profession-experience": [
+      "metier"
+    ],
+    "plenty-to-pick": [
+      "metier"
+    ],
+    "plenty-to-harvest": [
+      "metier"
+    ],
+    "plenty-of-wood": [
+      "metier"
+    ],
+    "plenty-of-fish": [
+      "metier"
+    ],
+    "plenty-of-ore": [
+      "metier"
+    ],
+    "plenty-of-game": [
+      "metier"
+    ],
+    "resource-generation": [
+      "metier"
+    ],
+    "generation-of-resources": [
+      "metier"
+    ],
+    "generous-nature": [
+      "metier"
+    ],
+    "protectors-of-nature": [
+      "metier"
+    ],
+    "saved-ingredients": [
+      "metier"
+    ],
+    "production-line": [
+      "metier"
+    ],
+    "item-quality": [
+      "metier"
+    ],
+    "crushing": [
+      "metier"
+    ],
+    "improved-smithmagic": [
+      "metier"
+    ],
+    "elemental-smithmagic": [
+      "metier"
+    ],
+    "fairy-factory": [
+      "metier"
+    ],
+    "mount-breeding": [
+      "montures"
+    ],
+    "mount-experience": [
+      "montures"
+    ],
+    "paddock-efficiency": [
+      "montures"
+    ],
+    "hardy-mounts": [
+      "montures"
+    ],
+    "mounts-in-love": [
+      "montures"
+    ],
+    "wise-mounts": [
+      "montures"
+    ],
+    "precocious-mounts": [
+      "montures"
+    ],
+    "pet-experience": [
+      "montures"
+    ],
+    "kolossium-experience": [
+      "pvp"
+    ],
+    "kolossokens": [
+      "pvp"
+    ],
+    "bonta-and-brakmar": [
+      "pvp"
+    ],
+    "greedy-perceptors": [
+      "pvp"
+    ],
+    "temporal-anomalies": [
+      "anomalies"
+    ],
+    "anomaly-madness": [
+      "anomalies"
+    ],
+    "dimensional-voyages": [
+      "anomalies"
+    ]
+  },
+  "a_classer": [
+    "surprise-gifts",
+    "very-yum",
+    "troolz-merry-go-round",
+    "amaknian-dream",
+    "full-of-life",
+    "our-miss-triste-blessing",
+    "new-year's-day",
+    "sweet-sounds-of-music",
+    "in-the-pink",
+    "metamunch-experience",
+    "leprechaun-luck",
+    "vow-of-poverty"
+  ]
+}
