@@ -42,6 +42,8 @@ const S = {
   q: '',
   tags: new Set(),
   period: '30',
+  fromSearch: false, // le jour affiché vient d'un clic dans les résultats
+  searchScroll: 0,   // position de défilement des résultats, pour y revenir
 };
 
 const tagInfo = (id) => S.data.tags[id] || { label: id, color: '#7D766C' };
@@ -127,8 +129,13 @@ function renderDay() {
     return;
   }
   const next = S.byDate.get(addDays(d.date, 1));
+  const back = S.fromSearch
+    ? `<button type="button" class="back-link" data-back-results>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        Retour aux résultats</button>`
+    : '';
   const xp = d.xp ? `<div class="reward"><span class="label">XP</span><span class="value">${fmtNum(d.xp)}</span></div>` : '';
-  el.innerHTML = `
+  el.innerHTML = `${back}
     <article class="card day-card">
       <div class="day-head">
         <h2>${longDate(d.date)}</h2>
@@ -237,18 +244,25 @@ function setSearching(on) {
   const toggle = $('#search-toggle');
   toggle.setAttribute('aria-expanded', String(on));
   toggle.querySelector('span').textContent = on ? 'Fermer la recherche' : 'Recherche avancée';
-  if (on) renderSearch();
-  window.scrollTo({ top: 0 });
+  if (on) {
+    renderSearch();
+    requestAnimationFrame(() => window.scrollTo({ top: S.searchScroll }));
+  } else {
+    window.scrollTo({ top: 0 });
+  }
 }
 
-function openSearch() {
+function openSearch({ keepScroll = false } = {}) {
   if (S.searching) return;
+  S.fromSearch = false;
+  if (!keepScroll) S.searchScroll = 0;
   history.pushState({ searching: true }, '', `?date=${S.selected}#recherche`);
   setSearching(true);
 }
 
 function closeSearch() {
   if (!S.searching) return;
+  S.fromSearch = false;
   if (history.state && history.state.searching) history.back(); // popstate referme la vue
   else { setSearching(false); updateURL(); }
 }
@@ -262,6 +276,7 @@ function bind() {
     const b = e.target.closest('.cal-day');
     if (b && !b.disabled) {
       if (S.searching) closeSearch();
+      S.fromSearch = false;
       select(b.dataset.date);
     }
   });
@@ -291,13 +306,34 @@ function bind() {
   $('#results').addEventListener('click', (e) => {
     const b = e.target.closest('.result');
     if (!b) return;
-    const date = b.dataset.date;
-    closeSearch();
-    select(date);
+    // On empile une entrée d'historique : la flèche « Retour aux résultats »
+    // comme le bouton retour du téléphone ramènent à la recherche, filtres et position intacts.
+    S.searchScroll = window.scrollY;
+    S.fromSearch = true;
+    S.selected = b.dataset.date;
+    S.month = S.selected.slice(0, 7);
+    history.pushState({ fromSearch: true }, '', `?date=${S.selected}`);
+    setSearching(false);
+    renderCalendar();
+    renderDay();
+    // Sur mobile le calendrier est au-dessus : on amène directement la flèche et le bonus à l'écran.
+    if (window.matchMedia('(max-width: 959.98px)').matches) $('#day-view').scrollIntoView();
+  });
+
+  $('#day-view').addEventListener('click', (e) => {
+    if (!e.target.closest('[data-back-results]')) return;
+    if (history.state && history.state.fromSearch) history.back();
+    else openSearch({ keepScroll: true });
   });
 
   window.addEventListener('popstate', () => {
-    setSearching(location.hash === '#recherche');
+    const searching = location.hash === '#recherche';
+    if (!searching) {
+      S.fromSearch = Boolean(history.state && history.state.fromSearch);
+      renderCalendar();
+      renderDay();
+    }
+    setSearching(searching);
     updateURL(); // garde la date sélectionnée dans l'URL après un retour arrière
   });
 }
